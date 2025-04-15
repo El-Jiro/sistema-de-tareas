@@ -12,7 +12,7 @@
 	<artifactId>tareas</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>tareas</name>
-	<description>Sisema de administración de tareas </description>
+	<description>Sistema de administración de tareas </description>
 	<url/>
 	<licenses>
 		<license/>
@@ -50,8 +50,22 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>21.0.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-base</artifactId>
+			<version>20</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-fxml</artifactId>
+			<version>20</version>
+		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>

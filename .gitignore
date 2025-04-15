@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+###JavaFX SDK ###
+javafx-sdk-21.0.6
