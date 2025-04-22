@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gm.tareas.controlador.IndexControlador">
+<AnchorPane fx:id="fechaTareaColumna" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gm.tareas.controlador.IndexControlador">
    <children>
-      <Label layoutX="205.0" layoutY="42.0" text="Sistema de Tareas" textAlignment="CENTER">
+      <Label layoutX="222.0" layoutY="43.0" text="Sistema de Tareas" textAlignment="CENTER" textFill="#e63946">
          <font>
-            <Font size="24.0" />
+            <Font name="Arial Black" size="25.0" />
          </font>
       </Label>
+      <TableView fx:id="tareasTabla" layoutX="92.0" layoutY="108.0" prefHeight="230.0" prefWidth="569.0">
+        <columns>
+          <TableColumn fx:id="idTareaColumna" prefWidth="42.39996337890625" text="ID" />
+          <TableColumn fx:id="nombreTareaColumna" prefWidth="132.79998779296875" text="Tarea" />
+            <TableColumn fx:id="responsableColumna" prefWidth="160.0" text="Responsable" />
+            <TableColumn fx:id="estadoColumna" prefWidth="118.39993286132812" text="Estado" />
+            <TableColumn fx:id="fechaColumna" prefWidth="120.79998779296875" text="Fecha límite" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>
