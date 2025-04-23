@@ -3,6 +3,8 @@ package gm.tareas.controlador;
 import gm.tareas.modelo.EstadoTarea;
 import gm.tareas.modelo.Tarea;
 import gm.tareas.servicio.TareaServicio;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -41,6 +43,9 @@ public class IndexControlador implements Initializable {
     private  TableColumn<Tarea, EstadoTarea> estadoColumna;
     @FXML
     private TableColumn<Tarea, Date> fechaColumna;
+
+    //Creamos una lista Observable, es decir que se actualizará automáticamente con cada cambio en nuestra base de datos
+    private final ObservableList<Tarea> tareasLista = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
