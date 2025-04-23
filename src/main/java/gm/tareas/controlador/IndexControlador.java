@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,17 @@ public class IndexControlador implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Configuramos nuestra tabla para que sólo se pueda seleccionar una fila
         tareasTabla.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
+        configurarColumnas();
     }
+
+    private void configurarColumnas() {
+        //Indicamos la propiedad de los objetos Tarea que se cargará en cada columna
+        idTareaColumna.setCellValueFactory(new PropertyValueFactory<>("idTarea"));
+        nombreTareaColumna.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        responsableColumna.setCellValueFactory(new PropertyValueFactory<>("responsable"));
+        estadoColumna.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        fechaColumna.setCellValueFactory(new PropertyValueFactory<>("fechaLimite"));
+    }
+
+
 }

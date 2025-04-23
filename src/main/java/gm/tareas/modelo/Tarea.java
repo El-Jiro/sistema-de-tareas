@@ -15,7 +15,7 @@ public class Tarea {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idTarea;
 
     private String nombre;
     private String responsable;
