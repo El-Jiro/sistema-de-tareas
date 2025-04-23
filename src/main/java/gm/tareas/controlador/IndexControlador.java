@@ -49,6 +49,8 @@ public class IndexControlador implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Configuramos nuestra tabla para que sólo se pueda seleccionar una fila
+        tareasTabla.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
     }
 }
