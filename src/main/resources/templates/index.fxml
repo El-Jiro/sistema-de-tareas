@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -13,14 +14,18 @@
             <Font name="Arial Black" size="25.0" />
          </font>
       </Label>
-      <TableView fx:id="tareasTabla" layoutX="92.0" layoutY="108.0" prefHeight="230.0" prefWidth="569.0">
+      <TableView fx:id="tareasTabla" layoutX="55.0" layoutY="107.0" prefHeight="230.0" prefWidth="580.0">
         <columns>
-          <TableColumn fx:id="idTareaColumna" prefWidth="42.39996337890625" text="ID" />
-          <TableColumn fx:id="nombreTareaColumna" prefWidth="132.79998779296875" text="Tarea" />
-            <TableColumn fx:id="responsableColumna" prefWidth="160.0" text="Responsable" />
-            <TableColumn fx:id="estadoColumna" prefWidth="118.39993286132812" text="Estado" />
+          <TableColumn fx:id="idTareaColumna" prefWidth="42.39996337890625" styleClass="table-cell" text="ID" />
+          <TableColumn fx:id="nombreTareaColumna" prefWidth="176.800048828125" text="Tarea" />
+            <TableColumn fx:id="responsableColumna" prefWidth="116.0" text="Responsable" />
+            <TableColumn fx:id="estadoColumna" prefWidth="118.39993286132812" text="Estatus" />
             <TableColumn fx:id="fechaColumna" prefWidth="120.79998779296875" text="Fecha límite" />
         </columns>
+         <styleClass>
+            <String fx:value=".table-cell" />
+            <String fx:value="-fx-alligment-center" />
+         </styleClass>
       </TableView>
    </children>
 </AnchorPane>

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -20,14 +20,14 @@ public class Tarea {
     private String nombre;
     private String responsable;
     @Enumerated(EnumType.STRING)
-    private EstadoTarea status;
-    private Date fechaLimite;
+    private EstadoTarea estatus;
+    private LocalDate fechaLimite;
 
     @Builder(builderMethodName = "builderSinId")
-    public Tarea(String nombre, String responsable, EstadoTarea status, Date fechaLimite) {
+    public Tarea(String nombre, String responsable, EstadoTarea estatus, LocalDate fechaLimite) {
         this.nombre = nombre;
         this.responsable = responsable;
-        this.status = status;
+        this.estatus = estatus;
         this.fechaLimite = fechaLimite;
     }
 }

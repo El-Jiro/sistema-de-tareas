@@ -53,15 +53,28 @@ public class IndexControlador implements Initializable {
         //Configuramos nuestra tabla para que sólo se pueda seleccionar una fila
         tareasTabla.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnas();
+        listarTareas();
     }
+
+
 
     private void configurarColumnas() {
         //Indicamos la propiedad de los objetos Tarea que se cargará en cada columna
         idTareaColumna.setCellValueFactory(new PropertyValueFactory<>("idTarea"));
         nombreTareaColumna.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         responsableColumna.setCellValueFactory(new PropertyValueFactory<>("responsable"));
-        estadoColumna.setCellValueFactory(new PropertyValueFactory<>("estado"));
+        estadoColumna.setCellValueFactory(new PropertyValueFactory<>("estatus"));
         fechaColumna.setCellValueFactory(new PropertyValueFactory<>("fechaLimite"));
+    }
+
+    private void listarTareas() {
+        logger.info("Consultando listado de tareas...");
+        //Limpiamos la lista
+        tareasLista.clear();
+        //Añadimos a la lista todos los objetos de tipo tarea que haya en nuestra base de datos
+        tareasLista.addAll(tareaServicio.listarTareas());
+        //Agregamos los elementos de la lista a nuestra tabla
+        tareasTabla.setItems(tareasLista);
     }
 
 
