@@ -33,6 +33,8 @@ public class SistemaTareasFx extends Application {
            loader.setControllerFactory(applicationContext::getBean);
            //Creamos una Escena a partir del objeto loader
            Scene scene = new Scene(loader.load());
+           //Cargamos el css
+           scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
            //Cargamos la escena en el stage o escenario
            primaryStage.setScene(scene);
            //Hacemos visible el stage
