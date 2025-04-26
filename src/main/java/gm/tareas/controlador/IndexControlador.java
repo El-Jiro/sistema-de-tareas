@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -30,6 +32,7 @@ public class IndexControlador implements Initializable {
     /*
     * Creamos atributos privados para enlazar los componentes de la vista,
     * los nombres deberán coincidir con el id que definimos en el archivo xml
+    * para que se cree el enlace automáticamente, de lo contrario no funcionará
     * */
 
     @FXML
@@ -43,7 +46,7 @@ public class IndexControlador implements Initializable {
     @FXML
     private  TableColumn<Tarea, EstadoTarea> estadoColumna;
     @FXML
-    private TableColumn<Tarea, Date> fechaColumna;
+    private TableColumn<Tarea, LocalDate> fechaColumna;
 
     //Creamos una lista Observable, es decir que se actualizará automáticamente con cada cambio en nuestra base de datos
     private final ObservableList<Tarea> tareasLista = FXCollections.observableArrayList();
@@ -56,15 +59,36 @@ public class IndexControlador implements Initializable {
         listarTareas();
     }
 
-
-
     private void configurarColumnas() {
+
+        //Creamos un formateador de fecha
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        //Creamos un cellFactoryPersonalizado para la columna de fecha límite
+        fechaColumna.setCellFactory(column-> new TableCell<>(){
+
+            /*
+            * Sobreescribimos el método updateItem de TableCell, si la celda está vacía,
+            * simplemente escribimos una cadena vacía en ella, de lo contrario formateamos
+            * la fecha con el formateador que creamos arriba*/
+                    @Override
+                    protected void updateItem(LocalDate fecha, boolean empty) {
+                        super.updateItem(fecha, empty);
+                        if (empty || fecha == null){
+                            setText("");
+                        } else {
+                            setText(formatter.format(fecha));
+                        }
+                    }
+                }
+        );
+
         //Indicamos la propiedad de los objetos Tarea que se cargará en cada columna
         idTareaColumna.setCellValueFactory(new PropertyValueFactory<>("idTarea"));
         nombreTareaColumna.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         responsableColumna.setCellValueFactory(new PropertyValueFactory<>("responsable"));
         estadoColumna.setCellValueFactory(new PropertyValueFactory<>("estatus"));
         fechaColumna.setCellValueFactory(new PropertyValueFactory<>("fechaLimite"));
+
     }
 
     private void listarTareas() {
