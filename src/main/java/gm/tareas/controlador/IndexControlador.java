@@ -82,6 +82,21 @@ public class IndexControlador implements Initializable {
                 }
         );
 
+        //Hacemos lo mismo con la columna de estatus
+        estadoColumna.setCellFactory(column-> new TableCell<>(){
+
+            @Override
+            protected void updateItem(EstadoTarea estadoTarea, boolean empty) {
+                //Si la celda no está vacía, mostraremos el displayName del estatus en vez del elemento real del enum
+                super.updateItem(estadoTarea, empty);
+                if (empty|| estadoTarea == null){
+                    setText("");
+                } else {
+                    setText(estadoTarea.getDisplayName());
+                }
+            }
+        });
+
         //Indicamos la propiedad de los objetos Tarea que se cargará en cada columna
         idTareaColumna.setCellValueFactory(new PropertyValueFactory<>("idTarea"));
         nombreTareaColumna.setCellValueFactory(new PropertyValueFactory<>("nombre"));
