@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,8 @@ public class IndexControlador implements Initializable {
 
     //Añadimos un atributo privado de tipo Logger para mandar información a la consola
     private static final Logger logger = LoggerFactory.getLogger(IndexControlador.class);
+    //Añadimos un salto de línea
+    private static String nl = System.lineSeparator();
     //Inyectamos una instancia de la clase de servicio mediante autowired
     @Autowired
     private TareaServicio tareaServicio;
@@ -47,6 +50,8 @@ public class IndexControlador implements Initializable {
     private  TableColumn<Tarea, EstadoTarea> estadoColumna;
     @FXML
     private TableColumn<Tarea, LocalDate> fechaColumna;
+    @FXML
+    private ComboBox<EstadoTarea> estatusSelector;
 
     //Creamos una lista Observable, es decir que se actualizará automáticamente con cada cambio en nuestra base de datos
     private final ObservableList<Tarea> tareasLista = FXCollections.observableArrayList();
@@ -57,6 +62,7 @@ public class IndexControlador implements Initializable {
         tareasTabla.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         configurarColumnas();
         listarTareas();
+        incializarComboBox();
     }
 
     private void configurarColumnas() {
@@ -104,6 +110,36 @@ public class IndexControlador implements Initializable {
         estadoColumna.setCellValueFactory(new PropertyValueFactory<>("estatus"));
         fechaColumna.setCellValueFactory(new PropertyValueFactory<>("fechaLimite"));
 
+    }
+
+    private void incializarComboBox(){
+
+        //Añadimos todos los valores de EstadoTarea al selector
+        estatusSelector.getItems().addAll(EstadoTarea.values());
+
+        //Mostramos el displayName en vez del valor
+        estatusSelector.setConverter(new StringConverter<EstadoTarea>() {
+            @Override
+            public String toString(EstadoTarea estadoTarea) {
+                return estadoTarea != null? estadoTarea.getDisplayName(): "";
+            }
+
+            //Obtenemos nuevamente el valor real a partir del displayName
+            @Override
+            public EstadoTarea fromString(String s) {
+                return estatusSelector.getItems().stream()
+                        .filter(estadoTarea ->
+                                estadoTarea.getDisplayName().equals(s))
+                                .findFirst()
+                                .orElse(null);
+            }
+        });
+
+        estatusSelector.setOnAction(actionEvent ->{
+            EstadoTarea estadoTarea = estatusSelector.getValue();
+            logger.info("Valor real: " + estadoTarea.name() + nl);
+            logger.info("Nombre mostrado: " + estadoTarea.getDisplayName());
+        });
     }
 
     private void listarTareas() {
