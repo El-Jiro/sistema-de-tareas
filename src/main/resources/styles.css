@@ -1,3 +1,51 @@
-.table-cell{
+.table-cell {
     -fx-alignment: center
+}
+
+#agregarBoton{
+    -fx-background-color: #067801;
+}
+
+#agregarBoton:hover{
+    -fx-background-color: #065902
+}
+
+#agregarBoton:pressed{
+    -fx-background-color: #0ca803
+}
+
+#modificarBoton{
+    -fx-background-color: #ffd60a;
+}
+
+#modificarBoton:hover{
+    -fx-background-color: #cfad08
+}
+
+#modificarBoton:pressed{
+    -fx-background-color: #ffdc2e
+}
+
+#eliminarBoton {
+    -fx-background-color: #e63946
+}
+
+#eliminarBoton:hover {
+    -fx-background-color: #ad262b
+}
+
+#eliminarBoton:pressed {
+    -fx-background-color: #f73e45;
+}
+
+#limpiarBoton {
+    -fx-background-color: #1d457d
+}
+
+#limpiarBoton:hover {
+    -fx-background-color: #16345e
+}
+
+#limpiarBoton:pressed {
+    -fx-background-color: #1d69b
 }
