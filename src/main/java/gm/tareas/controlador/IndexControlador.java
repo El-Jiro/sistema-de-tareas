@@ -152,5 +152,10 @@ public class IndexControlador implements Initializable {
         tareasTabla.setItems(tareasLista);
     }
 
+    public void agregarTarea(){
+
+    }
+
+
 
 }

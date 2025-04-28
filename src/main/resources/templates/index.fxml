@@ -70,7 +70,7 @@
       </AnchorPane>
       <AnchorPane layoutX="62.0" layoutY="394.0" prefHeight="92.0" prefWidth="656.0">
          <children>
-            <Button fx:id="agregarBoton" layoutX="41.0" layoutY="27.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" text="Agregar" textFill="#f1faee">
+            <Button fx:id="agregarBoton" layoutX="41.0" layoutY="27.0" mnemonicParsing="false" onAction="#agregarTarea" prefHeight="38.0" prefWidth="114.0" text="Agregar" textFill="#f1faee">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
