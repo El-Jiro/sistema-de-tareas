@@ -38,6 +38,7 @@ public class IndexControlador implements Initializable {
     * para que se cree el enlace automáticamente, de lo contrario no funcionará
     * */
 
+    //---------------- Tabla y Columnas ---------------------
     @FXML
     private TableView<Tarea> tareasTabla;
     @FXML
@@ -50,8 +51,16 @@ public class IndexControlador implements Initializable {
     private  TableColumn<Tarea, EstadoTarea> estadoColumna;
     @FXML
     private TableColumn<Tarea, LocalDate> fechaColumna;
+
+    //----------------- Elementos del formulario ------------------
+    @FXML
+    private TextField nombreTareaTexto;
+    @FXML
+    private TextField responsableTexto;
     @FXML
     private ComboBox<EstadoTarea> estatusSelector;
+    @FXML
+    private DatePicker fechaSelector;
 
     //Creamos una lista Observable, es decir que se actualizará automáticamente con cada cambio en nuestra base de datos
     private final ObservableList<Tarea> tareasLista = FXCollections.observableArrayList();
@@ -154,8 +163,61 @@ public class IndexControlador implements Initializable {
 
     public void agregarTarea(){
 
+        //Comprobamos que los campos de nombre, responsable y estatus no estén vacíos
+        if (nombreTareaTexto.getText().isEmpty()){
+            mostrarMensaje("Error de validación", "Debe proporcionar un nombre para la tarea",
+                    new Alert(Alert.AlertType.ERROR));
+            nombreTareaTexto.requestFocus();
+            return;
+        } else if (responsableTexto.getText().isEmpty()) {
+            mostrarMensaje("Error de validación", "Debe proporcionar un responsable para la tarea",
+                    new Alert(Alert.AlertType.ERROR));
+            return;
+        } else if (estatusSelector.getValue() == null){
+            mostrarMensaje("Error de validación", "Debe indicar el status de la tarea",
+                    new Alert(Alert.AlertType.ERROR));
+            return;
+        } else {
+            //Creamos un objeto Tarea vacío
+            Tarea tarea = new Tarea();
+            //Actualizamos sus atributos con la información introducida por el usuario
+            recolectarDatosFormulario(tarea);
+            //Guardamos el objeto en la base de Datos
+            tareaServicio.guardarTarea(tarea);
+            //Mostramos un mensaje de confirmación
+            mostrarMensaje("Nueva tarea creada",
+                    "Se ha creado correctamente la tarea: " + tarea.getNombre(),
+                    new Alert(Alert.AlertType.INFORMATION));
+            //Limpiamos el formulario
+            limpiarFormulario();
+            //Volvemos a cargar la información de la base de datos
+            listarTareas();
+        }
     }
 
+    //Creamos un método para reiniciar los campos del formulario
+    private void limpiarFormulario() {
+        nombreTareaTexto.clear();
+        responsableTexto.clear();
+        estatusSelector.setValue(null);
+        fechaSelector.setValue(null);
+    }
 
+    //Creamos un método que reciba un objeto Tarea vacío y actualice sus atributos de acuerdo con los datos del formulario
+    private void recolectarDatosFormulario(Tarea tarea) {
+
+        tarea.setNombre(nombreTareaTexto.getText());
+        tarea.setResponsable(responsableTexto.getText());
+        tarea.setEstatus(estatusSelector.getValue());
+        tarea.setFechaLimite(fechaSelector.getValue());
+    }
+
+    private void mostrarMensaje(String titulo, String mensaje, Alert alert) {
+
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
 
 }
