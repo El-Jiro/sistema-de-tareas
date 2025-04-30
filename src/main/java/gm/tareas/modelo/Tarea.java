@@ -15,6 +15,7 @@ public class Tarea {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @Setter(AccessLevel.NONE)
     private Integer idTarea;
 
     private String nombre;
@@ -23,11 +24,4 @@ public class Tarea {
     private EstadoTarea estatus;
     private LocalDate fechaLimite;
 
-    @Builder(builderMethodName = "builderSinId")
-    public Tarea(String nombre, String responsable, EstadoTarea estatus, LocalDate fechaLimite) {
-        this.nombre = nombre;
-        this.responsable = responsable;
-        this.estatus = estatus;
-        this.fechaLimite = fechaLimite;
-    }
 }
