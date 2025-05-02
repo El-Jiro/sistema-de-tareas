@@ -19,7 +19,7 @@
             <Font name="Arial Black" size="25.0" />
          </font>
       </Label>
-      <TableView fx:id="tareasTabla" layoutX="289.0" layoutY="108.0" prefHeight="265.0" prefWidth="459.0">
+      <TableView fx:id="tareasTabla" layoutX="289.0" layoutY="108.0" onMouseClicked="#cargarTareaFormulario" prefHeight="265.0" prefWidth="459.0">
         <columns>
           <TableColumn fx:id="idTareaColumna" prefWidth="42.39996337890625" styleClass="table-cell" text="ID" />
           <TableColumn fx:id="nombreTareaColumna" prefWidth="176.800048828125" text="Tarea" />

@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,8 @@ public class IndexControlador implements Initializable {
     private ComboBox<EstadoTarea> estatusSelector;
     @FXML
     private DatePicker fechaSelector;
+
+    private Integer idTareaInterno;
 
     //Creamos una lista Observable, es decir que se actualizará automáticamente con cada cambio en nuestra base de datos
     private final ObservableList<Tarea> tareasLista = FXCollections.observableArrayList();
@@ -144,11 +147,13 @@ public class IndexControlador implements Initializable {
             }
         });
 
+        /*Añadimos esto para debugear
+
         estatusSelector.setOnAction(actionEvent ->{
             EstadoTarea estadoTarea = estatusSelector.getValue();
             logger.info("Valor real: " + estadoTarea.name() + nl);
             logger.info("Nombre mostrado: " + estadoTarea.getDisplayName());
-        });
+        });*/
     }
 
     private void listarTareas() {
@@ -179,7 +184,7 @@ public class IndexControlador implements Initializable {
             return;
         } else {
             //Creamos un objeto Tarea vacío
-            Tarea tarea = new Tarea();
+            var tarea = new Tarea();
             //Actualizamos sus atributos con la información introducida por el usuario
             recolectarDatosFormulario(tarea);
             //Guardamos el objeto en la base de Datos
@@ -218,6 +223,23 @@ public class IndexControlador implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    public void cargarTareaFormulario() {
+
+        //Obtenemos la fila seleccionada y la guardamos en un objeto de tipo Tarea
+        Tarea tarea = tareasTabla.getSelectionModel().getSelectedItem();
+
+        //Verificamos que realmente se haya seleccionado una fila
+        if (tarea != null){
+            //Inicializamos el id interno con el valor seleccionado de la tabla:
+            idTareaInterno = tarea.getIdTarea();
+            //Cargamos el resto de la información en los campos del formulario
+            nombreTareaTexto.setText(tarea.getNombre());
+            responsableTexto.setText(tarea.getResponsable());
+            estatusSelector.setValue(tarea.getEstatus());
+            fechaSelector.setValue(tarea.getFechaLimite());
+        }
     }
 
 }
