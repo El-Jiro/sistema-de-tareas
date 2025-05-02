@@ -5,6 +5,7 @@ import gm.tareas.modelo.Tarea;
 import gm.tareas.servicio.TareaServicio;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -156,6 +157,7 @@ public class IndexControlador implements Initializable {
         });*/
     }
 
+    //Cargamos la información de nuestra base de datos en la tabla
     private void listarTareas() {
         logger.info("Consultando listado de tareas...");
         //Limpiamos la lista
@@ -166,6 +168,7 @@ public class IndexControlador implements Initializable {
         tareasTabla.setItems(tareasLista);
     }
 
+    //Creamos un objeto tarea con la información del formulario y los guardamos en la base de datos
     public void agregarTarea(){
 
         //Comprobamos que los campos de nombre, responsable y estatus no estén vacíos
@@ -182,26 +185,67 @@ public class IndexControlador implements Initializable {
             mostrarMensaje("Error de validación", "Debe indicar el status de la tarea",
                     new Alert(Alert.AlertType.ERROR));
             return;
-        } else {
-            //Creamos un objeto Tarea vacío
-            var tarea = new Tarea();
-            //Actualizamos sus atributos con la información introducida por el usuario
-            recolectarDatosFormulario(tarea);
-            //Guardamos el objeto en la base de Datos
-            tareaServicio.guardarTarea(tarea);
-            //Mostramos un mensaje de confirmación
-            mostrarMensaje("Nueva tarea creada",
-                    "Se ha creado correctamente la tarea: " + tarea.getNombre(),
-                    new Alert(Alert.AlertType.INFORMATION));
-            //Limpiamos el formulario
-            limpiarFormulario();
-            //Volvemos a cargar la información de la base de datos
-            listarTareas();
         }
+        //Creamos un objeto Tarea vacío
+        var tarea = new Tarea();
+        //Actualizamos sus atributos con la información introducida por el usuario
+        recolectarDatosFormulario(tarea);
+        //Establecemos el id en null como precaución
+        tarea.setIdTarea(null);
+        //Guardamos el objeto en la base de Datos
+        tareaServicio.guardarTarea(tarea);
+        //Mostramos un mensaje de confirmación
+        mostrarMensaje("Nueva tarea creada", "Se ha creado correctamente la tarea: "
+                        + tarea.getNombre(), new Alert(Alert.AlertType.INFORMATION));
+        //Limpiamos el formulario
+        limpiarFormulario();
+        //Volvemos a cargar la información de la base de datos
+        listarTareas();
+
+    }
+
+    //Creamos un método para modificar un objeto ya existente
+    public void modificarTarea() {
+        //Verificamos que el id interno no esté vacío, en caso contrario mandamos un mensaje de advertencia
+        if (idTareaInterno == null){
+            mostrarMensaje("Ningún registro seleccionado",
+                    "Debe seleccionar primero una tarea de la tabla para modificarla",
+                    new Alert(Alert.AlertType.WARNING));
+            return;
+        }
+
+        //Comprobamos que los campos de nombre, responsable y estatus no estén vacíos
+        if (nombreTareaTexto.getText().isEmpty()){
+            mostrarMensaje("Error de validación", "Debe proporcionar un nombre para la tarea",
+                    new Alert(Alert.AlertType.ERROR));
+            nombreTareaTexto.requestFocus();
+            return;
+        } else if (responsableTexto.getText().isEmpty()) {
+            mostrarMensaje("Error de validación", "Debe proporcionar un responsable para la tarea",
+                    new Alert(Alert.AlertType.ERROR));
+            return;
+        } else if (estatusSelector.getValue() == null){
+            mostrarMensaje("Error de validación", "Debe indicar el status de la tarea",
+                    new Alert(Alert.AlertType.ERROR));
+            return;
+        }
+
+        //Creamos un objeto Tarea vacío y rellenamos su información con el método recolectarDatosFormulario
+        Tarea tarea = new Tarea();
+        recolectarDatosFormulario(tarea);
+        //Actualizamos la información de la base de datos
+        tareaServicio.guardarTarea(tarea);
+        //Mandamos un mensaje de éxito
+        mostrarMensaje("Tarea modificada", "Se ha modificado con éxito la tarea con el id: "
+                + tarea.getIdTarea(), new Alert(Alert.AlertType.INFORMATION));
+        //Limpiamos el formulario y actualizamos la tabla
+        limpiarFormulario();
+        listarTareas();
     }
 
     //Creamos un método para reiniciar los campos del formulario
-    private void limpiarFormulario() {
+    public void limpiarFormulario() {
+        idTareaInterno = null;
         nombreTareaTexto.clear();
         responsableTexto.clear();
         estatusSelector.setValue(null);
@@ -211,6 +255,10 @@ public class IndexControlador implements Initializable {
     //Creamos un método que reciba un objeto Tarea vacío y actualice sus atributos de acuerdo con los datos del formulario
     private void recolectarDatosFormulario(Tarea tarea) {
 
+        //En caso de que idTareaInterno no sea nulo, asignamso su valor al atributo idTarea de nuestro objeto
+        if (idTareaInterno != null){
+            tarea.setIdTarea(idTareaInterno);
+        }
         tarea.setNombre(nombreTareaTexto.getText());
         tarea.setResponsable(responsableTexto.getText());
         tarea.setEstatus(estatusSelector.getValue());
@@ -241,5 +289,6 @@ public class IndexControlador implements Initializable {
             fechaSelector.setValue(tarea.getFechaLimite());
         }
     }
+
 
 }

@@ -15,7 +15,6 @@ public class Tarea {
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    @Setter(AccessLevel.NONE)
     private Integer idTarea;
 
     private String nombre;
