@@ -5,13 +5,12 @@ import gm.tareas.modelo.Tarea;
 import gm.tareas.servicio.TareaServicio;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.util.StringConverter;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Component;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Component
@@ -69,6 +68,7 @@ public class IndexControlador implements Initializable {
     //Creamos una lista Observable, es decir que se actualizará automáticamente con cada cambio en nuestra base de datos
     private final ObservableList<Tarea> tareasLista = FXCollections.observableArrayList();
 
+    //Inicializamos la tabla y su información
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Configuramos nuestra tabla para que sólo se pueda seleccionar una fila
@@ -78,6 +78,7 @@ public class IndexControlador implements Initializable {
         incializarComboBox();
     }
 
+    //Configuramos la información que se mostrará en cada columna
     private void configurarColumnas() {
 
         //Creamos un formateador de fecha
@@ -125,6 +126,7 @@ public class IndexControlador implements Initializable {
 
     }
 
+    //Cargamos los valores de nuestro Enum en estatusSelector
     private void incializarComboBox(){
 
         //Añadimos todos los valores de EstadoTarea al selector
@@ -147,14 +149,6 @@ public class IndexControlador implements Initializable {
                                 .orElse(null);
             }
         });
-
-        /*Añadimos esto para debugear
-
-        estatusSelector.setOnAction(actionEvent ->{
-            EstadoTarea estadoTarea = estatusSelector.getValue();
-            logger.info("Valor real: " + estadoTarea.name() + nl);
-            logger.info("Nombre mostrado: " + estadoTarea.getDisplayName());
-        });*/
     }
 
     //Cargamos la información de nuestra base de datos en la tabla
@@ -204,7 +198,7 @@ public class IndexControlador implements Initializable {
 
     }
 
-    //Creamos un método para modificar un objeto ya existente
+    //Creamos un método para modificar un registro ya existente
     public void modificarTarea() {
         //Verificamos que el id interno no esté vacío, en caso contrario mandamos un mensaje de advertencia
         if (idTareaInterno == null){
@@ -243,6 +237,36 @@ public class IndexControlador implements Initializable {
         listarTareas();
     }
 
+    //Creamos un método para borrar un registro
+    public void eliminarTarea() {
+
+        //Verificamos que el id interno no esté vacío, en caso contrario mandamos un mensaje de advertencia
+        if (idTareaInterno == null){
+            mostrarMensaje("Ningún registro seleccionado",
+                    "Debe seleccionar primero una tarea de la tabla para eliminarla",
+                    new Alert(Alert.AlertType.WARNING));
+            return;
+        }
+
+        //Mandamos un mensaje de confirmación
+        Optional<ButtonType> confirmacion = mostrarMensaje("Confirmación" ,
+                "¿Esta seguro de que desea eliminar la tarea seleccionada?"
+                + nl + "¡Esta acción es irreversible!", new Alert(Alert.AlertType.CONFIRMATION));
+
+        /*Si el usuario selecciona aceptar, llamamos a nuestro servicio para eliminar
+         * el registro de la base de datos y mandamos un aviso indicando que se ha eliminado
+         * correctamente*/
+        if (confirmacion.isPresent() && confirmacion.get() == ButtonType.OK){
+            tareaServicio.eliminarTarea(idTareaInterno);
+            mostrarMensaje("Tarea eliminada",
+                    "Se ha eliminado correctamente la tarea con el id: "
+                            + idTareaInterno, new Alert(Alert.AlertType.INFORMATION));
+
+            limpiarFormulario();
+            listarTareas();
+        }
+    }
+
     //Creamos un método para reiniciar los campos del formulario
     public void limpiarFormulario() {
         idTareaInterno = null;
@@ -265,14 +289,16 @@ public class IndexControlador implements Initializable {
         tarea.setFechaLimite(fechaSelector.getValue());
     }
 
-    private void mostrarMensaje(String titulo, String mensaje, Alert alert) {
-
+    //Mostramos un mensaje de alerta y devolvemos el valor del botón
+    private Optional<ButtonType> mostrarMensaje(String titulo, String mensaje, @NotNull Alert alert) {
         alert.setTitle(titulo);
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
-        alert.showAndWait();
+
+        return alert.showAndWait();
     }
 
+    //Cargamos la información del registro seleccionado en el formulario
     public void cargarTareaFormulario() {
 
         //Obtenemos la fila seleccionada y la guardamos en un objeto de tipo Tarea
@@ -289,6 +315,5 @@ public class IndexControlador implements Initializable {
             fechaSelector.setValue(tarea.getFechaLimite());
         }
     }
-
 
 }

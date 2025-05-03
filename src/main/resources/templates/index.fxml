@@ -86,7 +86,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </Button>
-            <Button fx:id="eliminarBoton" layoutX="335.0" layoutY="27.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="114.0" text="Eliminar" textFill="#f1faee">
+            <Button fx:id="eliminarBoton" layoutX="335.0" layoutY="27.0" mnemonicParsing="false" onAction="#eliminarTarea" prefHeight="38.0" prefWidth="114.0" text="Eliminar" textFill="#f1faee">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
